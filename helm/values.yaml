@@ -1,0 +1,5 @@
+owner: punagrawal
+replicas: 1
+tier: svc
+team: shared
+target_port: 8080

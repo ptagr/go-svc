@@ -1,0 +1,42 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ .Chart.Name }}
+spec:
+  replicas: {{ .Values.replicas }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Chart.Name }}
+        tier: {{ .Values.tier }}
+        team: {{ .Values.team }}
+    spec:
+      containers:
+      - name: {{ .Chart.Name }}
+        image: {{ .Values.docker_image }}
+        ports:
+          - containerPort: {{ .Values.target_port }}
+        env:
+          - name: APP
+            value: {{ .Chart.Name }}
+          - name: COMMIT_AUTHOR
+            value: {{ .Values.author }}
+        livenessProbe:
+          httpGet:
+            path: /k8s
+            port: {{ .Values.target_port }}
+          initialDelaySeconds: 5
+          timeoutSeconds: 1
+        readinessProbe:
+          httpGet:
+            path: /k8s
+            port: {{ .Values.target_port }}
+          initialDelaySeconds: 5
+          timeoutSeconds: 1
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 50m
+            memory: 128Mi

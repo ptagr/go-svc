@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Chart.Name }}
+  labels:
+    app: {{ .Chart.Name }}
+    tier: {{ .Values.tier }}
+    team: {{ .Values.team }}
+spec:
+  type: LoadBalancer
+  ports:
+  - name: http
+    port: 80
+    targetPort: {{ .Values.target_port }}
+  selector:
+    app: {{ .Chart.Name }}
+    tier: {{ .Values.tier }}
+    team: {{ .Values.team }}
