@@ -1,0 +1,22 @@
+version: '1.0'
+steps:
+  build_image:
+    title: Building Docker Image
+    type: build
+    image_name: go-svc
+    working_directory: ./
+    dockerfile: Dockerfile
+    tag: '${{CF_BRANCH_TAG_NORMALIZED}}'
+
+  push_to_registry:
+    type: push
+    title: push
+    description: push to gcr
+    candidate: ${{build_image}}
+    tag: '${{CF_BRANCH_TAG_NORMALIZED}}'
+    image_name: go-svc
+    registry: gcr
+    fail_fast: false
+
+  # release_to_env:
+  #   image: codefresh/plugin-helm:2.7.2
